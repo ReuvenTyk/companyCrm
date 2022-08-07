@@ -67,7 +67,8 @@
       <td class="d-flex justify-content-between">
         {{ customer.email }}
         <div>
-          <button (click)="delCustomer(customer.id)">
+          <!-- delCustomer(customer.id) -->
+          <button (click)="showNotification = true; delId = customer.id">
             <i class="bi bi-trash m-2"></i>
           </button>
           <button><i class="bi bi-pencil-square m-2"></i></button>
@@ -76,4 +77,11 @@
     </tr>
   </tbody>
 </table>
-<div></div>
+
+<app-notification
+  *ngIf="showNotification"
+  (buttonClicked)="notificationRespon($event)"
+  [headerLabel]="'Delete'"
+>
+  Are you sure you want to delete this data from DB?
+</app-notification>

@@ -19,7 +19,12 @@ module.exports = {
     const schema = joi.object({
       first_name: joi.string().required().min(2).max(50),
       last_name: joi.string().required().min(2).max(50),
-      phone: joi.number().required().min(6).max(200),
+      phone: joi
+        .string()
+        .required()
+        .min(9)
+        .max(200)
+        .regex(/^[0-9]+(\.?[0-9]+)?$/),
       email: joi
         .string()
         .required()
@@ -50,8 +55,8 @@ module.exports = {
     }
   },
 
-  /* updateCustomers: async function (req, res, next) {
-    const reqBody = req.body;
+  updateCustomers: async function (req, res, next) {
+    const param = req.body;
 
     const schema = joi.object({
       first_name: joi.string().required().min(2).max(50),
@@ -63,7 +68,7 @@ module.exports = {
         .regex(/^[^@]+@[^@]+$/),
     });
 
-    const { error, value } = schema.validate(reqBody);
+    const { error, value } = schema.validate(param);
 
     if (error) {
       res.status(400).send(`data invalid. add failed: ${error}`);
@@ -74,10 +79,11 @@ module.exports = {
 
     try {
       const result = await database.query(sql);
+      res.status(200).jason(result[0]);
     } catch (err) {
       res.status(400).send(`data invalid. add failed: ${error}`);
     }
-  }, */
+  },
 
   deleteCustomer: async function (req, res, next) {
     const param = req.query;

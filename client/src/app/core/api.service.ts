@@ -27,4 +27,11 @@ export class ApiService {
       `${environment.serverUrl}/customers?id=${id}`
     );
   }
+
+  updateCustomer(customer: addCustomer, id: number): Observable<Customer> {
+    return this.http.put<Customer>(
+      `${environment.serverUrl}/customers?id=${id}`,
+      customer
+    );
+  }
 }

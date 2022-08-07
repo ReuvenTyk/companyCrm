@@ -4,9 +4,8 @@ import { AppRoutingModule } from '../app-routing.module';
 import { NotificationComponent } from './notification/notification.component';
 
 @NgModule({
-  declarations: [
-    NotificationComponent
-  ],
+  declarations: [NotificationComponent],
   imports: [CommonModule, AppRoutingModule],
+  exports: [NotificationComponent],
 })
 export class SharedModule {}

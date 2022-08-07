@@ -10,6 +10,9 @@ import { Customer } from '../shared/type';
 })
 export class CustomersComponent implements OnInit {
   customers!: Array<Customer>;
+  showNotification = false;
+  reAssuDel?: boolean;
+  delId!: number;
 
   customerForm = new FormGroup({
     first_name: new FormControl('', { validators: Validators.required }),
@@ -38,8 +41,6 @@ export class CustomersComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.customerForm.value);
-
     this.apiService.addCustomers(this.customerForm.value).subscribe({
       next: (data: Customer) => {
         this.getCustomers();
@@ -48,10 +49,20 @@ export class CustomersComponent implements OnInit {
     });
   }
 
+  notificationRespon(respon: boolean) {
+    if (respon) {
+      this.delCustomer(this.delId);
+    } else {
+      this.showNotification = false;
+    }
+  }
+
   delCustomer(id: number) {
+    this.showNotification = true;
     this.apiService.deleteCustomer(id).subscribe({
       next: () => {
         this.getCustomers();
+        this.showNotification = false;
       },
       error: (err) => console.log(err),
     });

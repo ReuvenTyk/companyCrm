@@ -1,1 +1,35 @@
-<p>notification works!</p>
+<div
+  class="notification-container"
+  role="alert"
+  [ngClass]="{ 'd-block': showNotification }"
+>
+  <div class="notification bg-info text-white">
+    <div class="n-header">
+      {{ headerLabel }}
+    </div>
+
+    <div>
+      <ng-content></ng-content>
+    </div>
+    <div class="d-flex justify-content-center">
+      <div class="text-center pt-10 mx-3">
+        <button
+          type="button"
+          class="btn btn-dark"
+          (click)="onButtonClicked(true)"
+        >
+          OK
+        </button>
+      </div>
+      <div class="text-center pt-10 mx-3">
+        <button
+          type="button"
+          class="btn btn-dark"
+          (click)="onButtonClicked(false)"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
