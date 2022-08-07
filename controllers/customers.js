@@ -82,7 +82,7 @@ module.exports = {
   deleteCustomer: async function (req, res, next) {
     const param = req.query;
     console.log(param);
-    const sql = `DELETE FROM customers WHERE id=${param}`;
+    const sql = `DELETE FROM customers WHERE id=${param.id}`;
 
     try {
       const result = await database.query(sql, param);

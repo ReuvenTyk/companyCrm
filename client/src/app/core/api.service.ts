@@ -23,7 +23,7 @@ export class ApiService {
   }
 
   deleteCustomer(id: number): Observable<Customer> {
-    return this.http.get<Customer>(
+    return this.http.delete<Customer>(
       `${environment.serverUrl}/customers?id=${id}`
     );
   }
