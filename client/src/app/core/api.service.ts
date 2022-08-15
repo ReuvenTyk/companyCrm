@@ -28,9 +28,9 @@ export class ApiService {
     );
   }
 
-  updateCustomer(customer: addCustomer, id: number): Observable<Customer> {
+  updateSingleCustomer(customer: Customer, id: number): Observable<Customer> {
     return this.http.put<Customer>(
-      `${environment.serverUrl}/customers?id=${id}`,
+      `${environment.serverUrl}/customers`,
       customer
     );
   }

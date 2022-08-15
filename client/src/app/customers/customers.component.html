@@ -1,83 +1,89 @@
+<app-add-customer (buttonClicked)="refresh($event)"></app-add-customer>
 <form
   [formGroup]="customerForm"
+  action="update"
+  [ngModel]
   (ngSubmit)="onSubmit()"
-  class="row g-3 align-items-center d-flex justify-content-between m-3"
 >
-  <div class="col-auto">
-    <input
-      class="form-control"
-      type="text"
-      formControlName="first_name"
-      placeholder="First Name"
-      aria-label="first name"
-    />
-  </div>
-  <div class="col-auto">
-    <input
-      class="form-control"
-      type="text"
-      formControlName="last_name"
-      placeholder="Last Name"
-      aria-label="last name"
-    />
-  </div>
-  <div class="col-auto">
-    <input
-      class="form-control"
-      type="text"
-      formControlName="phone"
-      placeholder="Phone"
-      aria-label="Phone"
-    />
-  </div>
-  <div class="col-auto">
-    <input
-      class="form-control"
-      type="email"
-      formControlName="email"
-      placeholder="Email"
-      aria-label="Email"
-    />
-  </div>
-  <button
-    [disabled]="!customerForm.valid"
-    type="submit"
-    class="btn btn-primary col-auto"
-  >
-    <i class="bi bi-plus-circle me-1"></i>Add Customer
-  </button>
-</form>
+  <table class="table table-bordered border-dark">
+    <thead class="table-light">
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Email</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
 
-<table class="table table-bordered border-dark">
-  <thead class="table-light">
-    <tr>
-      <th scope="col">No.</th>
-      <th scope="col">First Name</th>
-      <th scope="col">Last Name</th>
-      <th scope="col">Phone</th>
-      <th scope="col">Email</th>
-    </tr>
-  </thead>
-  <tbody *ngFor="let customer of customers; let i = index">
-    <tr>
-      <th scope="row">{{ i + 1 }}</th>
-      <td>{{ customer.first_name }}</td>
-      <td>{{ customer.last_name }}</td>
-      <td>{{ customer.phone }}</td>
-      <td class="d-flex justify-content-between">
-        {{ customer.email }}
+    <tbody *ngFor="let customer of customers; let i = index">
+      <th>{{ i + 1 }}</th>
+
+      <td>
+        <input
+          type="text"
+          class="form-control-plaintext t1{{ customer.id }}"
+          id="first_name"
+          [value]="customer.first_name"
+          formControlName="first_name"
+          placeholder="{{ customer.first_name }}"
+          [readonly]="!isEditingRow(customer.id)"
+        />
+      </td>
+      <td>
+        <input
+          type="text"
+          class="form-control-plaintext t2{{ customer.id }}"
+          id="last_name"
+          formControlName="last_name"
+          placeholder="{{ customer.last_name }}"
+          [readonly]="!isEditingRow(customer.id)"
+        />
+      </td>
+      <td>
+        <input
+          type="text"
+          class="form-control-plaintext t3{{ customer.id }}"
+          id="phone"
+          formControlName="phone"
+          placeholder="{{ customer.phone }}"
+          [readonly]="!isEditingRow(customer.id)"
+        />
+      </td>
+      <td>
+        <input
+          type="text"
+          class="form-control-plaintext t4{{ customer.id }}"
+          id="email"
+          formControlName="email"
+          placeholder="{{ customer.email }}"
+          [readonly]="!isEditingRow(customer.id)"
+        />
+      </td>
+      <td class="d-flex justify-content-center">
         <div>
-          <!-- delCustomer(customer.id) -->
-          <button (click)="showNotification = true; delId = customer.id">
-            <i class="bi bi-trash m-2"></i>
+          <button
+            class="bi bi-trash m-1 btn"
+            (click)="delId = customer.id; showNotification = true"
+            *ngIf="!isEditingRow(customer.id) ? showEdit : !showEdit"
+          ></button>
+          <button
+            *ngIf="!isEditingRow(customer.id) ? showEdit : !showEdit"
+            class="bi bi-pencil-square m-1 row{{ i }} btn"
+            (click)="editRow(customer.id)"
+          ></button>
+        </div>
+        <div *ngIf="isEditingRow(customer.id) ? showEdit : !showEdit">
+          <button type="submit" class="btn m-1">
+            <!-- [disabled]="isValid" -->
+            Edit
           </button>
-          <button><i class="bi bi-pencil-square m-2"></i></button>
         </div>
       </td>
-    </tr>
-  </tbody>
-</table>
-
+    </tbody>
+  </table>
+</form>
 <app-notification
   *ngIf="showNotification"
   (buttonClicked)="notificationRespon($event)"

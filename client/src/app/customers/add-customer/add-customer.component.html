@@ -1,0 +1,49 @@
+<form
+  [formGroup]="customerForm"
+  (ngSubmit)="onSubmit()"
+  class="row g-3 align-items-center d-flex justify-content-between m-3"
+>
+  <div class="col-auto">
+    <input
+      class="form-control"
+      type="text"
+      formControlName="first_name"
+      placeholder="First Name"
+      aria-label="first name"
+    />
+  </div>
+  <div class="col-auto">
+    <input
+      class="form-control"
+      type="text"
+      formControlName="last_name"
+      placeholder="Last Name"
+      aria-label="last name"
+    />
+  </div>
+  <div class="col-auto">
+    <input
+      class="form-control"
+      type="text"
+      formControlName="phone"
+      placeholder="Phone"
+      aria-label="Phone"
+    />
+  </div>
+  <div class="col-auto">
+    <input
+      class="form-control"
+      type="email"
+      formControlName="email"
+      placeholder="Email"
+      aria-label="Email"
+    />
+  </div>
+  <button
+    [disabled]="!customerForm.valid"
+    type="submit"
+    class="btn btn-primary col-auto"
+  >
+    <i class="bi bi-plus-circle me-1"></i>Add Customer
+  </button>
+</form>
