@@ -55,31 +55,38 @@ module.exports = {
     }
   },
 
-  updateCustomers: async function (req, res, next) {
-    const param = req.body;
+  updateCustomer: async function (req, res, next) {
+    const reqBody = req.body;
 
     const schema = joi.object({
+      id: joi.number().required(),
       first_name: joi.string().required().min(2).max(50),
       last_name: joi.string().required().min(2).max(50),
-      phone: joi.number().required().min(6).max(200),
+      phone: joi.number().required().min(6),
       email: joi
         .string()
         .required()
         .regex(/^[^@]+@[^@]+$/),
     });
 
-    const { error, value } = schema.validate(param);
+    const { error, value } = schema.validate(reqBody);
 
     if (error) {
       res.status(400).send(`data invalid. add failed: ${error}`);
       return;
     }
 
-    const sql = `UPDATE customers SET first_name=${first_name},last_name=${last_name},phone=${phone},email=${email} WHERE id=${id}`;
+    const sql = `UPDATE customers SET first_name=?, last_name=?, phone=?, email=? WHERE id=?`;
 
     try {
-      const result = await database.query(sql);
-      res.status(200).jason(result[0]);
+      const result = await database.query(sql, [
+        value.first_name,
+        value.last_name,
+        value.phone,
+        value.email,
+        value.id,
+      ]);
+      res.status(200).json(value);
     } catch (err) {
       res.status(400).send(`data invalid. add failed: ${error}`);
     }

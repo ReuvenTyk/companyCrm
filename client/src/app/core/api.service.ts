@@ -28,10 +28,11 @@ export class ApiService {
     );
   }
 
-  updateSingleCustomer(customer: Customer, id: number): Observable<Customer> {
+  updateCustomer(customer: Customer): Observable<Customer> {
     return this.http.put<Customer>(
       `${environment.serverUrl}/customers`,
-      customer
+      customer,
+      { headers: { 'Content-Type': 'application/json' } }
     );
   }
 }

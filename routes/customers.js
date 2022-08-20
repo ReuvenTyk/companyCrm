@@ -4,7 +4,7 @@ const cm = require("../controllers/customers");
 
 router.get("/", cm.getCustomersList);
 router.post("/", cm.addCustomers);
-router.put("/", cm.updateCustomers);
+router.put("/", cm.updateCustomer);
 router.delete("/", cm.deleteCustomer);
 
 module.exports = router;

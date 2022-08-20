@@ -2,7 +2,7 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { ApiService } from '../core/api.service';
-import { Customer, addCustomer } from '../shared/type';
+import { Customer } from '../shared/type';
 
 @Component({
   selector: 'app-customers',
@@ -11,25 +11,33 @@ import { Customer, addCustomer } from '../shared/type';
 })
 export class CustomersComponent implements OnInit {
   customers!: Array<Customer>;
-  customer!: Customer;
+  customer: Customer = {
+    id: -1,
+    first_name: '',
+    last_name: '',
+    phone: '',
+    email: '',
+  };
   showNotification = false;
   reAssuDel?: boolean;
   delId!: number;
-  showEdit = true;
-  isDisabled = true;
-  isValid = true;
+  row?: number;
+  isValid = false;
   editCustomerId = -1;
+  currentForm?: FormGroup;
 
   customerForm = new FormGroup({
-    id: new FormControl('', { validators: Validators.required }),
-    first_name: new FormControl('', {
+    id: new FormControl(-1, {
       validators: Validators.required,
+    }),
+    first_name: new FormControl('a', {
+      validators: [Validators.required, Validators.minLength(2)],
     }),
     last_name: new FormControl('', {
-      validators: Validators.required,
+      validators: [Validators.required, Validators.minLength(2)],
     }),
     phone: new FormControl('', {
-      validators: [Validators.required, Validators.minLength(9)],
+      validators: [Validators.required, Validators.minLength(6)],
     }),
     email: new FormControl('', {
       validators: [Validators.required, Validators.email],
@@ -51,14 +59,16 @@ export class CustomersComponent implements OnInit {
     });
   }
 
-  /*  updateCustomer(customer: Customer, id: number) {
-    this.apiService.updateSingleCustomer(customer, id).subscribe({
+  updateCustomer() {
+    this.apiService.updateCustomer(this.customer).subscribe({
       next: () => {
-        console.log('updated');
+        this.getCustomers();
       },
-      error: (err) => console.error(err),
+      error: (err) => {
+        console.error(err);
+      },
     });
-  } */
+  }
 
   //refresh table after adding new customer
   refresh(state: boolean) {
@@ -68,16 +78,25 @@ export class CustomersComponent implements OnInit {
   }
 
   //Update row
-  onSubmit() {
-    /*  
-    if (this.customer.valid) {
-      console.log('valid');
-    } else {
-      console.log('invalid');
-    }
-    console.log(newCustomer);
- */
-    this.stopEdit(this.editCustomerId);
+  confirmEdit() {
+    this.customer = {
+      id: this.editCustomerId,
+      first_name: this.customerForm.get('first_name')?.value,
+      last_name: this.customerForm.get('last_name')?.value,
+      phone: this.customerForm.get('phone')?.value,
+      email: this.customerForm.get('email')?.value,
+    };
+    this.updateCustomer();
+
+    this.row = -1;
+    this.customer = {
+      id: -1,
+      first_name: '',
+      last_name: '',
+      phone: '',
+      email: '',
+    };
+    this.getCustomers();
   }
 
   //open notification for validation delete
@@ -91,7 +110,6 @@ export class CustomersComponent implements OnInit {
 
   //delete action
   delCustomer(id: number) {
-    this.showNotification = true;
     this.apiService.deleteCustomer(id).subscribe({
       next: () => {
         this.getCustomers();
@@ -101,70 +119,40 @@ export class CustomersComponent implements OnInit {
     });
   }
 
-  //choose row to edit
-  editRow(id: number) {
-    this.showEdit = true;
-
-    this.customers.find((c) => (c.id === id ? (this.customer = c) : ''));
-
-    //unchoose row
-    if (this.editCustomerId != id && this.editCustomerId != -1) {
-      for (let i = 1; i < 5; i++) {
-        const oldElem = this.getElem(`t${i}${this.editCustomerId}`);
-        this.changeFromEdit(oldElem);
-      }
+  openRow(i: number) {
+    if (this.row === i) {
+      return true;
     }
-
-    this.editCustomerId = id;
-    for (let i = 1; i < 5; i++) {
-      const newElem = this.getElem(`t${i}${id}`);
-      this.changeToEdit(newElem);
-    }
-    for (let key in this.customer) {
-      this.checkData(key);
-    }
+    return false;
   }
 
-  checkData(key: string) {
-    console.log(this.customerForm);
+  //choose row to edit
+  editRow(customer: Customer, i: number) {
+    this.editCustomerId = customer.id;
+    this.row = i;
+    this.currentForm = this.customerForm;
 
-    this.customerForm.get(key)?.valueChanges.subscribe((selectedValue) => {
-      /* console.log(selectedValue);
-      console.log(this.customerForm.get(key)?.valid); */
+    for (let key in this.customerForm.value) {
+      this.checkData(key);
+    }
 
-      if (this.customerForm.get(key)?.valid) {
-        this.isValid = true;
-      } else {
-        this.isValid = false;
-      }
+    this.customerForm.patchValue({
+      id: customer.id,
+      first_name: customer.first_name,
+      last_name: customer.last_name,
+      email: customer.email,
+      phone: customer.phone,
     });
   }
 
-  getElem(name: string): Element {
-    return this.renderer.selectRootElement(`.${name}`, true);
-  }
-
-  changeToEdit(elem: Element) {
-    this.renderer.removeClass(elem, 'form-control-plaintext');
-    this.renderer.addClass(elem, 'form-control');
-  }
-
-  changeFromEdit(elem: Element) {
-    this.renderer.removeClass(elem, 'form-control');
-    this.renderer.addClass(elem, 'form-control-plaintext');
-  }
-
-  stopEdit(id: number) {
-    this.isDisabled = !this.isDisabled;
-    this.showEdit = true;
-    this.editCustomerId = -1;
-    for (let i = 1; i < 5; i++) {
-      const elem = this.getElem(`t${i}${id}`);
-      this.changeFromEdit(elem);
-    }
-  }
-
-  isEditingRow(id: number): boolean {
-    return this.editCustomerId === id;
+  //Checking the data that is clicked for validation
+  checkData(key: string) {
+    this.customerForm.get(key)?.valueChanges.subscribe(() => {
+      if (this.customerForm.get(key)?.valid) {
+        this.isValid = false;
+      } else {
+        this.isValid = true;
+      }
+    });
   }
 }
