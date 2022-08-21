@@ -1,0 +1,50 @@
+<div class="d-flex align-items-center justify-content-center">
+  <div class="m-3">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <h3 class="text-center" style="letter-spacing: 1px">
+        <span
+          >Company<img
+            style="height: 30px"
+            src="../../../assets/images/crmLogo.png"
+          />Crm</span
+        >
+      </h3>
+
+      <div class="form-outline text-center m-3">
+        <input
+          #emailField
+          formControlName="email"
+          type="text"
+          name="email"
+          id="email"
+          placeholder="Email"
+        />
+      </div>
+
+      <div class="form-outline text-center m-3">
+        <input
+          formControlName="password"
+          type="password"
+          name="password"
+          id="pwd"
+          placeholder="Password"
+        />
+      </div>
+      <div class="text-center m-3">
+        <button class="btn btn-info btn-lg btn-block" type="submit">
+          Login
+        </button>
+      </div>
+    </form>
+    <div>
+      Don't have an account?
+      <a
+        routerLink="/signup-component"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        class="btn link-info"
+        >Register here</a
+      >
+    </div>
+  </div>
+</div>

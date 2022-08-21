@@ -12,3 +12,21 @@ export interface addCustomer {
   phone?: string | null;
   email?: string | null;
 }
+
+export interface Login {
+  email?: string | null;
+  password?: string | null;
+}
+
+export interface User {
+  token?: string;
+  id: number;
+  name: string;
+  email: string;
+}
+
+export interface RegisterUser {
+  name?: string | null;
+  email?: string | null;
+  password?: string | null;
+}

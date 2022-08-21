@@ -44,7 +44,7 @@ export class CustomersComponent implements OnInit {
     }),
   });
 
-  constructor(private apiService: ApiService, private renderer: Renderer2) {}
+  constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
     this.getCustomers();
