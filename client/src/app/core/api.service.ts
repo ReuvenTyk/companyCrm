@@ -23,20 +23,33 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   getCustomersList(): Observable<Array<Customer>> {
-    return this.http.get<Array<Customer>>(`${environment.serverUrl}/customers`);
+    return this.http.get<Array<Customer>>(
+      `${environment.serverUrl}/customers`,
+      {
+        headers: { 'x-auth-token': this.token },
+      }
+    );
   }
 
   addCustomers(customer: addCustomer): Observable<Customer> {
     return this.http.post<Customer>(
       `${environment.serverUrl}/customers`,
       customer,
-      { headers: { 'Content-Type': 'application/json' } }
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': this.token,
+        },
+      }
     );
   }
 
   deleteCustomer(id: number): Observable<Customer> {
     return this.http.delete<Customer>(
-      `${environment.serverUrl}/customers?id=${id}`
+      `${environment.serverUrl}/customers?id=${id}`,
+      {
+        headers: { 'x-auth-token': this.token },
+      }
     );
   }
 
@@ -44,7 +57,12 @@ export class ApiService {
     return this.http.put<Customer>(
       `${environment.serverUrl}/customers`,
       customer,
-      { headers: { 'Content-Type': 'application/json' } }
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': this.token,
+        },
+      }
     );
   }
 

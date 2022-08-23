@@ -1,4 +1,11 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { HttpHeaders } from '@angular/common/http';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
@@ -34,7 +41,9 @@ export class LoginComponent implements OnInit {
     }
 
     this.authService.login(this.loginForm.value).subscribe({
-      next: () => this.router.navigate(['customers-component']),
+      next: () => {
+        this.router.navigate(['customers-component']);
+      },
       error: (err) => console.error(err),
     });
   }

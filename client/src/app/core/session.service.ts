@@ -8,6 +8,6 @@ export class SessionService {
   constructor(private router: Router) {}
 
   redirectToFirstPage() {
-    this.router.navigate(['login-component']);
+    this.router.navigate(['customers-component']);
   }
 }
