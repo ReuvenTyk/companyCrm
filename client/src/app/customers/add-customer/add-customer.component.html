@@ -3,7 +3,7 @@
   (ngSubmit)="onSubmit()"
   class="row g-3 align-items-center d-flex justify-content-between m-3"
 >
-  <div class="col-auto">
+  <div class="col">
     <input
       class="form-control"
       type="text"
@@ -12,7 +12,7 @@
       aria-label="first name"
     />
   </div>
-  <div class="col-auto">
+  <div class="col">
     <input
       class="form-control"
       type="text"
@@ -21,7 +21,7 @@
       aria-label="last name"
     />
   </div>
-  <div class="col-auto">
+  <div class="col">
     <input
       class="form-control"
       type="text"
@@ -30,7 +30,7 @@
       aria-label="Phone"
     />
   </div>
-  <div class="col-auto">
+  <div class="col">
     <input
       class="form-control"
       type="email"
@@ -42,7 +42,7 @@
   <button
     [disabled]="!customerForm.valid"
     type="submit"
-    class="btn btn-primary col-auto"
+    class="btn btn-primary col"
   >
     <i class="bi bi-plus-circle me-1"></i>Add Customer
   </button>
