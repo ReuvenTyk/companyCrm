@@ -1,6 +1,5 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
 import { ApiService } from '../core/api.service';
 import { Customer } from '../shared/type';
 
@@ -25,6 +24,7 @@ export class CustomersComponent implements OnInit {
   isValid = false;
   editCustomerId = -1;
   currentForm?: FormGroup;
+  header?: string | null;
 
   customerForm = new FormGroup({
     id: new FormControl(-1, {
@@ -48,6 +48,7 @@ export class CustomersComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCustomers();
+    this.header = localStorage.getItem('email');
   }
 
   getCustomers() {

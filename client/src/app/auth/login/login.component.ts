@@ -39,7 +39,6 @@ export class LoginComponent implements OnInit {
     if (!this.loginForm.valid) {
       return;
     }
-
     this.authService.login(this.loginForm.value).subscribe({
       next: () => {
         this.router.navigate(['customers-component']);

@@ -16,7 +16,7 @@ export class AuthService {
   private readonly tokenField = 'token';
   redirectUrl: string | null = null;
   constructor(private apiService: ApiService, private router: Router) {}
-
+  userEmail?: string | null;
   canActivateChild(
     childRoute: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -39,10 +39,13 @@ export class AuthService {
   }
 
   login(details: Login): Observable<User> {
+    this.userEmail = details.email;
+
     return this.apiService.login(details).pipe(
       tap((data: User) => {
         if (data.token) {
           localStorage.setItem(this.tokenField, data.token);
+          localStorage.setItem('email', data.email);
           this.apiService.setToken(data.token);
         }
       })
@@ -51,6 +54,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem(this.tokenField);
+    localStorage.removeItem('email');
     this.apiService.setToken('');
   }
 }

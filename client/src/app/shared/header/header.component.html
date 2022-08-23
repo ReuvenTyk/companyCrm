@@ -1,7 +1,11 @@
 <nav class="navbar navbar-expand-lg bg-success bg-light">
   <div class="container-fluid d-flex justify-content-between me-3">
     <div>CompanyCrm</div>
-
-    <button class="btn" (click)="logout()">logout</button>
+    <div class="dropdown">
+      <button class="btn btn-secondery dropdown-toggle">{{ header }}</button>
+      <div class="dropdown-content">
+        <button class="btn" (click)="logout()">logout</button>
+      </div>
+    </div>
   </div>
 </nav>
